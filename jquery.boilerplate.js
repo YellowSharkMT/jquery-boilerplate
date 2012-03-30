@@ -25,6 +25,24 @@
             propertyName: "value"
         };
 
+    // Object-literal, place the properties & methods for the plugin here
+    var plugin_prototype = {
+        // properties
+        val_1:null,
+        val_2:null,
+        $el:$(this.element),
+        
+        // methods
+        init: function () {
+            // Place initialization logic here
+            // You already have access to the DOM element and the options via the instance, 
+            // e.g., this.element (jQuery-ified as this.$el), and this.options
+        },
+        someMethod:function(param1, param2){
+            // do stuff here
+        }
+    };
+    
     // The actual plugin constructor
     function Plugin( element, options ) {
         this.element = element;
@@ -38,14 +56,11 @@
         this._defaults = defaults;
         this._name = pluginName;
         
-        this.init();
+        this.init(); // this references the init() function in plugin_prototype
     }
 
-    Plugin.prototype.init = function () {
-        // Place initialization logic here
-        // You already have access to the DOM element and the options via the instance, 
-        // e.g., this.element and this.options
-    };
+    // extend the plugin_prototype object into Plugin.prototype
+    $.extend(Plugin.prototype, plugin_prototype);
 
     // A really lightweight plugin wrapper around the constructor, 
     // preventing against multiple instantiations, and allowing

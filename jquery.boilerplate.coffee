@@ -1,3 +1,6 @@
+# TODO: update this coffeescript to reflect the new arrangement 
+# found in the main file, jquery.boilerplate.js. (YellowSharkMT, 2012-03-30)
+
 #  Project:
 #  Description:
 #  Author:

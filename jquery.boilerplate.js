@@ -48,13 +48,27 @@
     };
 
     // A really lightweight plugin wrapper around the constructor, 
-    // preventing against multiple instantiations
-    $.fn[pluginName] = function ( options ) {
-        return this.each(function () {
-            if (!$.data(this, 'plugin_' + pluginName)) {
-                $.data(this, 'plugin_' + pluginName, new Plugin( this, options ));
-            }
-        });
-    };
+    // preventing against multiple instantiations, and allowing
+    // method calls to the object, like jQuery plugins NORMALLY DO.
+    $.fn[pluginName] = function(options){
+        if ($(this).length == 0) return false;
+    	var isMethodCall = (typeof options == 'string'),
+    		args = Array.prototype.slice.call(arguments, 1);
+    	// prevent calls to internal methods
+    	if (isMethodCall && options.substring(0, 1) == '_') {
+    		return this;
+    	}
+    	// handle initialization and non-getter methods
+    	return this.each(function() {
+    		var instance = $(this).data(pluginName);
+    		// constructor
+    		(!instance && !isMethodCall &&
+    			$(this).data(pluginName, new Plugin(this, options)));
+
+    		// method call
+    		(instance && isMethodCall && $.isFunction(instance[options]) &&
+    			instance[options].apply(instance, args));
+    	});
+    }
 
 }(jQuery, window));
